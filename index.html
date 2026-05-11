@@ -1,0 +1,757 @@
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Serif+Display&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --inc:#E8002D;--inc-mid:#b50024;--inc-dark:#7a0018;
+  --inc-pale:#fdeaed;--inc-pale2:#fbd5db;
+  --teal:#007B8A;--teal-pale:#e0f3f5;--teal-dark:#005f6b;
+  --amber:#B85C00;--amber-pale:#fef3e6;
+  --green:#2E7D32;--green-pale:#e8f5e9;
+  --red:#C62828;--red-pale:#fce8e8;
+  --slate:#374151;--muted:#6b7280;--border:#e5e7eb;
+  --bg:#f8f8f6;--white:#ffffff;
+  --paid:#007B8A;--paid-bg:#e0f3f5;--paid-acc:#005f6b;
+  --earned:#7B4FD4;--earned-bg:#f0eafd;--earned-acc:#5a35a8;
+  --owned:#E8002D;--owned-bg:#fdeaed;--owned-acc:#b50024;
+}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--slate);min-height:100vh;font-size:13px}
+
+.hdr{background:var(--inc);padding:0 24px;display:flex;align-items:center;justify-content:space-between;min-height:58px}
+.hdr-brand{display:flex;align-items:center;gap:10px}
+.hdr-logo{width:32px;height:32px;background:#fff;border-radius:6px;display:flex;align-items:center;justify-content:center}
+.hdr-logo svg{width:22px;height:22px}
+.hdr-name{color:#fff;font-family:'DM Serif Display',serif;font-size:17px;letter-spacing:-0.2px}
+.hdr-right{text-align:right}
+.hdr-client{color:rgba(255,255,255,0.6);font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:1px;margin-bottom:2px}
+.hdr-title{color:#fff;font-size:14px;font-weight:600}
+.hdr-sub{color:rgba(255,255,255,0.55);font-size:10px;margin-top:2px}
+
+.src-bar{background:var(--inc-mid);padding:6px 24px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.src-lbl{color:rgba(255,255,255,0.6);font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.8px;margin-right:4px}
+.pill{background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.22);border-radius:20px;padding:2px 10px;color:#fff;font-size:10px;font-weight:500}
+
+.tabs{padding:0 24px;background:var(--white);border-bottom:1px solid var(--border);display:flex;gap:0;overflow-x:auto}
+.tab{padding:12px 16px;font-size:11px;font-weight:600;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;letter-spacing:0.2px;transition:all 0.15s;white-space:nowrap}
+.tab.on{color:var(--inc);border-bottom-color:var(--inc)}
+.tab:hover:not(.on){color:var(--slate)}
+.tc{display:none}.tc.on{display:block}
+
+.body{padding:20px 24px 48px}
+.sec-lbl{font-size:10px;font-weight:700;color:var(--inc);text-transform:uppercase;letter-spacing:1.2px;margin-bottom:12px}
+
+.jbar{display:grid;grid-template-columns:1fr 1fr 1fr;border-radius:10px;overflow:hidden;margin-bottom:20px;border:1px solid var(--border)}
+.jstage{padding:16px 18px;position:relative}
+.j-paid{background:var(--paid-bg);border-right:1px solid var(--border)}
+.j-earned{background:var(--earned-bg);border-right:1px solid var(--border)}
+.j-owned{background:var(--owned-bg)}
+.jlabel{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;margin-bottom:3px}
+.j-paid .jlabel{color:var(--paid)}
+.j-earned .jlabel{color:var(--earned)}
+.j-owned .jlabel{color:var(--owned)}
+.jdesc{font-size:11px;color:var(--muted);line-height:1.5;margin-bottom:8px}
+.jstat{font-size:22px;font-weight:600;color:var(--slate)}
+.jsub{font-size:10px;color:var(--muted);margin-top:2px}
+.jarr{position:absolute;right:-9px;top:50%;transform:translateY(-50%);width:17px;height:17px;background:var(--white);border:1px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;z-index:2;font-size:11px;color:var(--muted)}
+
+.krow{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px}
+.kpi{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:14px 16px}
+.kpi-lbl{font-size:10px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:0.6px;margin-bottom:5px}
+.kpi-val{font-size:24px;font-weight:600;color:var(--slate);line-height:1}
+.kpi-sub{font-size:10px;color:var(--muted);margin-top:4px}
+.kdelta{display:inline-block;padding:2px 7px;border-radius:20px;font-size:10px;font-weight:600;margin-top:5px}
+.d-up{background:var(--green-pale);color:var(--green)}
+.d-dn{background:var(--red-pale);color:var(--red)}
+.d-ne{background:#f3f4f6;color:var(--muted)}
+
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px}
+.card{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:18px}
+.ctitle{font-size:12px;font-weight:600;color:var(--slate);margin-bottom:12px;display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.badge{font-size:9px;font-weight:700;padding:2px 7px;border-radius:20px;background:var(--paid-bg);color:var(--paid-acc)}
+.badge-e{background:var(--earned-bg);color:var(--earned-acc)}
+.badge-o{background:var(--owned-bg);color:var(--owned-acc)}
+.badge-warn{background:var(--red-pale);color:var(--red)}
+
+.nrow{display:flex;align-items:flex-start;gap:9px;padding:9px 0;border-bottom:1px solid #f0f0f0}
+.nrow:last-child{border-bottom:none;padding-bottom:0}
+.nnum{width:22px;height:22px;border-radius:50%;background:var(--inc);color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.nbody{flex:1}
+.ntitle{font-size:12px;font-weight:600;color:var(--slate);margin-bottom:2px}
+.nmeta{font-size:10px;color:var(--muted);margin-bottom:5px}
+.bw{background:#f0f0f0;border-radius:4px;height:4px;width:100%}
+.bf{height:4px;border-radius:4px}
+.tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:5px}
+.tag{font-size:10px;font-weight:600;padding:2px 7px;border-radius:20px}
+.t-up{background:var(--green-pale);color:var(--green)}
+.t-risk{background:var(--red-pale);color:var(--red)}
+.t-opp{background:var(--paid-bg);color:var(--paid-acc)}
+.t-ne{background:#f3f4f6;color:var(--muted)}
+.t-own{background:var(--owned-bg);color:var(--owned-acc)}
+.t-earn{background:var(--earned-bg);color:var(--earned-acc)}
+
+.sb{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:20px;font-size:9px;font-weight:700;text-transform:uppercase}
+.sbp{background:var(--paid-bg);color:var(--paid-acc)}
+.sbe{background:var(--earned-bg);color:var(--earned-acc)}
+.sbo{background:var(--owned-bg);color:var(--owned-acc)}
+.sbd{width:5px;height:5px;border-radius:50%;display:inline-block}
+.sbp .sbd{background:var(--paid)}
+.sbe .sbd{background:var(--earned)}
+.sbo .sbd{background:var(--owned)}
+
+.full{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:18px;margin-bottom:18px}
+
+.ch-row{display:flex;align-items:center;gap:9px;padding:8px 0;border-bottom:1px solid #f0f0f0}
+.ch-row:last-child{border-bottom:none}
+.ch-icon{width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#fff;flex-shrink:0}
+.ch-body{flex:1}
+.ch-name{font-size:11px;font-weight:600;color:var(--slate)}
+.ch-sub{font-size:10px;color:var(--muted)}
+.ch-stat{text-align:right}
+.ch-val{font-size:12px;font-weight:700;color:var(--slate)}
+.ch-lbl{font-size:10px;color:var(--muted)}
+
+.risk-row{display:flex;align-items:flex-start;gap:11px;padding:11px 0;border-bottom:1px solid #f0f0f0}
+.risk-row:last-child{border-bottom:none;padding-bottom:0}
+.sev{font-size:9px;font-weight:700;padding:3px 8px;border-radius:3px;flex-shrink:0;margin-top:1px;text-transform:uppercase}
+.sev-h{background:var(--red-pale);color:var(--red);border-left:3px solid var(--red)}
+.sev-m{background:var(--amber-pale);color:var(--amber);border-left:3px solid var(--amber)}
+.sev-l{background:var(--green-pale);color:var(--green);border-left:3px solid var(--green)}
+.rtitle{font-size:12px;font-weight:600;color:var(--slate);margin-bottom:2px}
+.rdesc{font-size:11px;color:var(--muted);line-height:1.5}
+
+.signal{padding:10px 13px;border-radius:8px;font-size:11px;line-height:1.5;color:var(--slate)}
+.signal strong{display:block;margin-bottom:2px;font-size:10px;font-weight:700;color:var(--teal)}
+
+.idea-card{border-radius:9px;padding:13px;margin-bottom:9px;border-left:4px solid var(--inc)}
+.idea-card:last-child{margin-bottom:0}
+.idea-opp{display:inline-block;font-size:9px;font-weight:700;padding:2px 8px;border-radius:20px;margin-bottom:6px;color:#fff}
+.idea-title{font-size:11px;font-weight:700;color:var(--slate);margin-bottom:4px}
+.idea-body{font-size:11px;color:var(--slate);line-height:1.6}
+.idea-card.pi{border-left-color:var(--paid);background:var(--paid-bg)}
+.idea-card.ei{border-left-color:var(--earned);background:var(--earned-bg)}
+.idea-card.oi{border-left-color:var(--owned);background:var(--owned-bg)}
+
+.ins-row{display:flex;gap:9px;align-items:center;padding:8px 0;border-bottom:1px solid #f0f0f0}
+.ins-row:last-child{border-bottom:none}
+.ins-ico{width:26px;height:26px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
+.ins-body{flex:1}
+.ins-title{font-size:11px;font-weight:600;color:var(--slate);margin-bottom:1px}
+.ins-sub{font-size:10px;color:var(--muted)}
+
+.funnel-wrap{display:flex;flex-direction:column;gap:4px;margin:10px 0}
+.funnel-stage{display:flex;align-items:center;gap:7px}
+.funnel-label{font-size:10px;font-weight:600;width:80px;text-align:right;color:var(--muted)}
+.funnel-bar-bg{flex:1;background:#f0f0f0;border-radius:3px;height:13px;overflow:hidden}
+.funnel-fill{height:100%;border-radius:3px;display:flex;align-items:center;padding-left:7px}
+.funnel-val{font-size:9px;font-weight:700;color:#fff}
+
+.sfooter{background:var(--inc-mid);border-radius:8px;padding:10px 18px;margin-top:4px;display:flex;align-items:center;justify-content:space-between}
+.sfl{color:rgba(255,255,255,0.7);font-size:10px}
+.sfr{color:rgba(255,255,255,0.5);font-size:10px;text-align:right}
+
+.arch-phase{margin-bottom:24px}
+.arch-phase-hdr{display:flex;align-items:flex-start;gap:10px;margin-bottom:12px}
+.pnum{width:26px;height:26px;border-radius:50%;background:var(--inc);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+.ptitle{font-size:13px;font-weight:600;color:var(--slate)}
+.ptime{font-size:10px;font-weight:600;color:var(--muted);margin-top:2px}
+.anodes{display:grid;grid-template-columns:repeat(3,1fr);gap:11px}
+.anode{border-radius:9px;padding:13px;border:1px solid var(--border)}
+.anode-hdr{display:flex;align-items:center;gap:7px;margin-bottom:7px}
+.anode-ico{width:26px;height:26px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0}
+.anode-title{font-size:11px;font-weight:700;color:var(--slate)}
+.anode-body{font-size:10px;color:var(--muted);line-height:1.6}
+.atags{display:flex;gap:4px;flex-wrap:wrap;margin-top:7px}
+.atag{font-size:9px;font-weight:600;padding:2px 7px;border-radius:20px}
+.at-live{background:var(--green-pale);color:var(--green)}
+.at-build{background:#e3f2fd;color:#1565c0}
+.at-manual{background:var(--amber-pale);color:var(--amber)}
+.at-model{background:var(--red-pale);color:var(--red)}
+.node-live{background:var(--paid-bg);border-color:#9fd8e0}
+.node-build{background:#f7f9fc;border-color:var(--border)}
+.node-gap{background:var(--amber-pale);border-color:#ffe082}
+.node-hard{background:var(--red-pale);border-color:#f4b8b8}
+
+.flow-row{display:flex;align-items:stretch;gap:0;margin-bottom:5px;border-radius:8px;overflow:hidden;border:1px solid var(--border)}
+.flow-src{padding:9px 12px;font-size:10px;font-weight:700;color:#fff;min-width:140px;flex-shrink:0;display:flex;align-items:center}
+.flow-mid{flex:1;padding:9px 12px;background:var(--white);font-size:10px;color:var(--muted);line-height:1.5;display:flex;align-items:center}
+.flow-dst{padding:9px 12px;font-size:10px;font-weight:700;min-width:120px;flex-shrink:0;display:flex;align-items:center;justify-content:center;text-align:center}
+.flow-arr{padding:0 7px;display:flex;align-items:center;color:var(--muted);font-size:14px;background:var(--white)}
+.fs-mw{background:var(--paid-acc)}
+.fs-p{background:var(--paid)}
+.fs-e{background:var(--earned-acc)}
+.fs-o{background:var(--owned-acc)}
+.fs-pt{background:#5C6BC0}
+.fd-live{background:var(--green-pale);color:var(--green)}
+.fd-build{background:var(--amber-pale);color:var(--amber)}
+.fd-model{background:var(--red-pale);color:var(--red)}
+.fd-manual{background:#f3f4f6;color:var(--muted)}
+
+.attr-card{background:var(--white);border:1px solid var(--border);border-radius:9px;padding:14px;margin-bottom:10px;border-left:4px solid var(--inc)}
+.attr-card:last-child{margin-bottom:0}
+.attr-title{font-size:11px;font-weight:700;color:var(--slate);margin-bottom:4px}
+.attr-body{font-size:10px;color:var(--muted);line-height:1.6}
+.attr-ok{border-left-color:var(--green)}
+.attr-gap{border-left-color:var(--red)}
+.attr-warn{border-left-color:var(--amber)}
+
+.footer{background:var(--inc);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;margin-top:24px}
+.fl{color:#fff;font-size:11px;font-weight:600}
+.fr{color:rgba(255,255,255,0.55);font-size:10px;text-align:right}
+</style>
+
+<div class="hdr">
+  <div class="hdr-brand">
+    <div class="hdr-logo">
+      <svg viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="22" height="22" rx="5" fill="#E8002D"/>
+        <text x="11" y="16" text-anchor="middle" font-size="12" font-weight="700" fill="#fff" font-family="sans-serif">I</text>
+      </svg>
+    </div>
+    <span class="hdr-name">Income Insurance</span>
+  </div>
+  <div class="hdr-right">
+    <div class="hdr-client">Chief Customer Marketing Officer — Marketing Intelligence</div>
+    <div class="hdr-title">Paid · Earned · Owned Customer Journey Dashboard — Life &amp; Health</div>
+    <div class="hdr-sub">Strategic intelligence aid &nbsp;·&nbsp; May 2026 &nbsp;·&nbsp; <span style="background:rgba(255,255,255,0.18);color:#fff;font-size:9px;font-weight:700;padding:1px 7px;border-radius:20px">Concept</span></div>
+  </div>
+</div>
+
+<div class="src-bar">
+  <span class="src-lbl">Data signals:</span>
+  <span class="pill">News Intelligence</span>
+  <span class="pill">Social Listening</span>
+  <span class="pill">Audience Insights</span>
+  <span class="pill">Influencer Analytics</span>
+  <span class="pill">Online Sensing (SG)</span>
+  <span class="pill">Owned Analytics</span>
+  <span class="pill">GSC + SEMrush</span>
+  <span class="pill">CRM / Policy Data</span>
+</div>
+
+<div class="tabs">
+  <div class="tab on" onclick="sw('overview',this)">Journey Overview</div>
+  <div class="tab" onclick="sw('paid',this)">Paid</div>
+  <div class="tab" onclick="sw('earned',this)">Earned</div>
+  <div class="tab" onclick="sw('owned',this)">Owned</div>
+  <div class="tab" onclick="sw('ideas',this)">💡 Campaign Ideas</div>
+  <div class="tab" onclick="sw('search',this)">🔍 Search Intelligence</div>
+  <div class="tab" onclick="sw('arch',this)" style="color:#E8002D;font-weight:700">⚙ Data Architecture</div>
+</div>
+
+<div class="body">
+
+<!-- OVERVIEW -->
+<div id="tc-overview" class="tc on">
+  <div class="sec-lbl">Customer journey at a glance — May 2026 · Life &amp; Health</div>
+  <div class="jbar">
+    <div class="jstage j-paid">
+      <div class="jlabel">Paid — Awareness</div>
+      <div class="jdesc">Reaching Singaporeans before a life event triggers insurance consideration.</div>
+      <div class="jstat">S$34M</div>
+      <div class="jsub">est. annual media spend (Life + Health)</div>
+      <div class="jarr">›</div>
+    </div>
+    <div class="jstage j-earned">
+      <div class="jlabel">Earned — Consideration</div>
+      <div class="jdesc">Reviews, community forums, financial media and agent word-of-mouth shaping trust.</div>
+      <div class="jstat">84K</div>
+      <div class="jsub">monthly brand mentions</div>
+      <div class="jarr">›</div>
+    </div>
+    <div class="jstage j-owned">
+      <div class="jlabel">Owned — Conversion &amp; Loyalty</div>
+      <div class="jdesc">Income.com.sg, myIncome app and owned social converting intent to policy purchase.</div>
+      <div class="jstat">1.8M</div>
+      <div class="jsub">monthly web + app sessions</div>
+    </div>
+  </div>
+
+  <div class="krow">
+    <div class="kpi" style="border-top:3px solid var(--paid)">
+      <div class="kpi-lbl">Paid reach (this month)</div>
+      <div class="kpi-val">61M</div>
+      <div class="kpi-sub">Impressions · digital + OOH + broadcast</div>
+      <div class="kdelta d-up">+8% MoM</div>
+    </div>
+    <div class="kpi" style="border-top:3px solid var(--earned)">
+      <div class="kpi-lbl">Earned share of voice</div>
+      <div class="kpi-val">42%</div>
+      <div class="kpi-sub">vs. Prudential, AIA, Great Eastern, Manulife</div>
+      <div class="kdelta d-up">+5pts vs Apr</div>
+    </div>
+    <div class="kpi" style="border-top:3px solid var(--owned)">
+      <div class="kpi-lbl">Owned engagement rate</div>
+      <div class="kpi-val">3.9%</div>
+      <div class="kpi-sub">Avg across all owned channels</div>
+      <div class="kdelta d-ne">Flat vs Apr</div>
+    </div>
+    <div class="kpi" style="border-top:3px solid #B85C00">
+      <div class="kpi-lbl">Purchase intent score</div>
+      <div class="kpi-val">68</div>
+      <div class="kpi-sub">Audience Insights index · Life &amp; Health</div>
+      <div class="kdelta d-up">+5pts vs Q1</div>
+    </div>
+  </div>
+
+  <div class="two">
+    <div class="card" style="display:flex;flex-direction:column">
+      <div class="ctitle">Top customer narratives this month</div>
+      <div class="nrow">
+        <div class="nnum">1</div>
+        <div class="nbody">
+          <div class="ntitle">Affordable coverage — "value for money" positioning</div>
+          <div class="nmeta">28,400 mentions · Facebook, forums, Reddit</div>
+          <div class="bw"><div class="bf" style="width:88%;background:var(--inc)"></div></div>
+          <div class="tags"><span class="tag t-up">Rising +24%</span><span class="sb sbe"><span class="sbd"></span>Earned</span></div>
+        </div>
+      </div>
+      <div class="nrow">
+        <div class="nnum">2</div>
+        <div class="nbody">
+          <div class="ntitle">Critical illness — "protecting my family" anxiety</div>
+          <div class="nmeta">19,800 mentions · YouTube, parenting groups, CNA</div>
+          <div class="bw"><div class="bf" style="width:70%;background:var(--inc)"></div></div>
+          <div class="tags"><span class="tag t-up">Rising +17%</span><span class="sb sbp"><span class="sbd"></span>Paid-amplified</span></div>
+        </div>
+      </div>
+      <div class="nrow">
+        <div class="nnum">3</div>
+        <div class="nbody">
+          <div class="ntitle">Claim experience — ease and speed</div>
+          <div class="nmeta">14,200 mentions · Google reviews, HardwareZone, seedly</div>
+          <div class="bw"><div class="bf" style="width:54%;background:var(--teal)"></div></div>
+          <div class="tags"><span class="tag t-ne">Stable</span><span class="tag t-opp">Trust driver</span></div>
+        </div>
+      </div>
+      <div class="nrow">
+        <div class="nnum">4</div>
+        <div class="nbody">
+          <div class="ntitle">"Income cheaper but is it enough coverage?" doubt</div>
+          <div class="nmeta">9,600 mentions · Reddit, Seedly, forums</div>
+          <div class="bw"><div class="bf" style="width:36%;background:var(--red)"></div></div>
+          <div class="tags"><span class="tag t-risk">Monitor — friction</span><span class="sb sbe"><span class="sbd"></span>Earned</span></div>
+        </div>
+      </div>
+      <div class="nrow">
+        <div class="nnum">5</div>
+        <div class="nbody">
+          <div class="ntitle">Mental health coverage awareness</div>
+          <div class="nmeta">6,800 mentions · Instagram, TikTok, LinkedIn</div>
+          <div class="bw"><div class="bf" style="width:26%;background:var(--owned)"></div></div>
+          <div class="tags"><span class="tag t-up">New +52%</span><span class="sb sbo"><span class="sbd"></span>Owned-seeded</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="display:flex;flex-direction:column">
+      <div class="ctitle">Customer sentiment by journey stage</div>
+      <div style="display:flex;justify-content:center;margin-bottom:14px">
+        <svg width="120" height="120" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+          <g transform="rotate(-90 60 60)">
+            <circle cx="60" cy="60" r="44" fill="none" stroke="#007B8A" stroke-width="22" stroke-dasharray="165.3 276.5" stroke-dashoffset="0"/>
+            <circle cx="60" cy="60" r="44" fill="none" stroke="#B85C00" stroke-width="22" stroke-dasharray="82.6 276.5" stroke-dashoffset="-165.3"/>
+            <circle cx="60" cy="60" r="44" fill="none" stroke="#E8002D" stroke-width="22" stroke-dasharray="28.9 276.5" stroke-dashoffset="-248"/>
+          </g>
+          <circle cx="60" cy="60" r="33" fill="#fff"/>
+          <text x="60" y="57" text-anchor="middle" font-size="15" font-weight="600" fill="#374151" font-family="DM Sans,sans-serif">60%</text>
+          <text x="60" y="70" text-anchor="middle" font-size="10" fill="#6b7280" font-family="DM Sans,sans-serif">positive</text>
+        </svg>
+      </div>
+      <div style="margin-bottom:12px">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;font-size:11px">
+          <div style="display:flex;align-items:center;gap:6px"><span style="width:9px;height:9px;border-radius:50%;background:var(--teal);display:inline-block"></span><span style="color:var(--muted);font-weight:500">Positive / trusting</span></div>
+          <span style="font-weight:600;color:var(--slate)">60%</span>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;font-size:11px">
+          <div style="display:flex;align-items:center;gap:6px"><span style="width:9px;height:9px;border-radius:50%;background:#B85C00;display:inline-block"></span><span style="color:var(--muted);font-weight:500">Neutral / comparing</span></div>
+          <span style="font-weight:600;color:var(--slate)">30%</span>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;font-size:11px">
+          <div style="display:flex;align-items:center;gap:6px"><span style="width:9px;height:9px;border-radius:50%;background:var(--red);display:inline-block"></span><span style="color:var(--muted);font-weight:500">Negative / doubting</span></div>
+          <span style="font-weight:600;color:var(--slate)">10%</span>
+        </div>
+      </div>
+      <div style="padding-top:11px;border-top:1px solid var(--border);font-size:10px;color:var(--muted);line-height:1.6;margin-bottom:12px">Negative signals cluster around coverage adequacy doubts on Seedly and Reddit. Positive peaks around agent service, claim settlement speed, and cost perception relative to peers.</div>
+      <div style="font-size:10px;font-weight:600;color:var(--muted);margin-bottom:7px;text-transform:uppercase;letter-spacing:0.5px">Awareness → Policy funnel</div>
+      <div class="funnel-wrap">
+        <div class="funnel-stage"><div class="funnel-label">Aware</div><div class="funnel-bar-bg"><div class="funnel-fill" style="width:100%;background:var(--teal)"><span class="funnel-val">61M reach</span></div></div></div>
+        <div class="funnel-stage"><div class="funnel-label">Consider</div><div class="funnel-bar-bg"><div class="funnel-fill" style="width:58%;background:var(--teal-dark)"><span class="funnel-val">84K engaged</span></div></div></div>
+        <div class="funnel-stage"><div class="funnel-label">Intend</div><div class="funnel-bar-bg"><div class="funnel-fill" style="width:34%;background:var(--inc-mid)"><span class="funnel-val">1.8M sessions</span></div></div></div>
+        <div class="funnel-stage"><div class="funnel-label">Purchase</div><div class="funnel-bar-bg"><div class="funnel-fill" style="width:14%;background:var(--inc-dark)"><span class="funnel-val">~24K policies</span></div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="full">
+    <div class="ctitle">Cross-channel gaps &amp; alignment signals</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+      <div style="padding:13px;background:var(--red-pale);border-radius:8px;border-left:4px solid var(--red)">
+        <div style="font-size:11px;font-weight:700;color:var(--red);margin-bottom:6px">Gaps to close</div>
+        <ul style="font-size:10px;color:var(--slate);line-height:1.9;padding-left:13px">
+          <li>"Enough coverage?" doubt: growing in Seedly forums, no paid counter-narrative</li>
+          <li>Mental health coverage: spiking on TikTok, only partial owned content coverage</li>
+          <li>Young earners (25–34): underrepresented in paid, high earned intent on Reddit</li>
+          <li>Post-claim advocacy: no owned programme to convert satisfied claimants into advocates</li>
+          <li>Competitor comparison searches: AIA vs Income, Prudential vs Income — no owned response</li>
+        </ul>
+      </div>
+      <div style="padding:13px;background:var(--green-pale);border-radius:8px;border-left:4px solid var(--green)">
+        <div style="font-size:11px;font-weight:700;color:var(--green);margin-bottom:6px">Strengths to amplify</div>
+        <ul style="font-size:10px;color:var(--slate);line-height:1.9;padding-left:13px">
+          <li>Value-for-money narrative leads across paid AND earned — reinforce with owned proof</li>
+          <li>Agent trust signal is strong: earned mentions of helpful advisers up 31%</li>
+          <li>Critical illness paid campaign driving earned pick-up — extend the content arc</li>
+          <li>myIncome app NPS positive — leverage as owned advocacy trigger</li>
+          <li>NTUC brand heritage: earned co-mentions with "union" / "affordable" growing</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="sfooter">
+    <div class="sfl">Sources: Meltwater News Intelligence · Social Listening · Audience Insights · Owned Analytics · CRM signals · Online Sensing SG</div>
+    <div class="sfr">May 2026 · Confidential — Income Insurance CCM Intelligence</div>
+  </div>
+</div>
+
+<!-- PAID -->
+<div id="tc-paid" class="tc">
+  <div class="sec-lbl">Paid — Awareness Stage</div>
+  <div style="background:var(--paid-bg);border:1px solid #9fd8e0;border-radius:9px;padding:14px 18px;margin-bottom:18px">
+    <div style="font-size:11px;font-weight:700;color:var(--paid-acc);margin-bottom:3px">What Paid is doing in the journey</div>
+    <div style="font-size:10px;color:var(--slate);line-height:1.7">Paid media is Income's first-mover signal — reaching Singaporeans before a life event (marriage, first child, new job, illness of a parent) triggers active insurance research. The creative frame set here determines what questions prospects bring into Earned. Risk: if paid pushes broad wellness messaging but earned conversation is about coverage depth and affordability, you're winning impressions but losing the consideration race to Prudential and AIA.</div>
+  </div>
+  <div class="krow">
+    <div class="kpi" style="border-top:3px solid var(--paid)"><div class="kpi-lbl">Monthly impressions</div><div class="kpi-val">61M</div><div class="kpi-sub">Digital + OOH + broadcast + print</div><div class="kdelta d-up">+8% MoM</div></div>
+    <div class="kpi" style="border-top:3px solid var(--paid)"><div class="kpi-lbl">Click-through rate</div><div class="kpi-val">1.6%</div><div class="kpi-sub">Paid social avg (FB + IG + YouTube)</div><div class="kdelta d-dn">-0.2pts vs Apr</div></div>
+    <div class="kpi" style="border-top:3px solid var(--paid)"><div class="kpi-lbl">Top paid segment</div><div class="kpi-val">35–44</div><div class="kpi-sub">By volume · primary breadwinner cohort</div><div class="kdelta d-up">+14% reach growth</div></div>
+    <div class="kpi" style="border-top:3px solid var(--paid)"><div class="kpi-lbl">Influencer partnerships</div><div class="kpi-val">22</div><div class="kpi-sub">Active paid partnerships this month</div><div class="kdelta d-ne">Stable</div></div>
+  </div>
+  <div class="two">
+    <div class="card">
+      <div class="ctitle">Active paid narrative themes <span class="badge">Meltwater Ad Intelligence</span></div>
+      <div class="nrow"><div class="nnum">1</div><div class="nbody"><div class="ntitle">Critical illness protection — family-first angle</div><div class="nmeta">Core campaign pillar · YouTube pre-roll, FB, CNA Digital</div><div class="bw"><div class="bf" style="width:87%;background:var(--teal)"></div></div><div class="tags"><span class="tag t-opp">Top performer</span></div></div></div>
+      <div class="nrow"><div class="nnum">2</div><div class="nbody"><div class="ntitle">Integrated Shield Plan (IHP) awareness</div><div class="nmeta">MediShield Life top-up · search SEM + CPF targeting</div><div class="bw"><div class="bf" style="width:64%;background:var(--teal-dark)"></div></div><div class="tags"><span class="tag t-ne">Stable</span></div></div></div>
+      <div class="nrow"><div class="nnum">3</div><div class="nbody"><div class="ntitle">Whole life / savings plans for young adults</div><div class="nmeta">Spotify, YouTube, IG Stories · 25–34 segment</div><div class="bw"><div class="bf" style="width:44%;background:var(--teal)"></div></div><div class="tags"><span class="tag t-ne">Stable</span></div></div></div>
+      <div class="nrow"><div class="nnum">4</div><div class="nbody"><div class="ntitle">Mental wellness add-on rider campaign</div><div class="nmeta">TikTok + LinkedIn · new creative · May launch</div><div class="bw"><div class="bf" style="width:28%;background:var(--inc)"></div></div><div class="tags"><span class="tag t-up">Emerging</span></div></div></div>
+      <div class="signal" style="background:var(--paid-bg);border:1px solid #9fd8e0;margin-top:12px"><strong>Meltwater signal</strong>CTR declining for the savings plan creative in the 25–34 cohort. Earned data shows this segment is most active on Reddit financial forums where the "enough coverage vs. price" debate dominates. Paid creative focused on savings/wealth isn't meeting that intent. Test coverage-led creative variants.</div>
+    </div>
+    <div class="card">
+      <div class="ctitle">Paid channel performance breakdown</div>
+      <div class="ch-row"><div class="ch-icon" style="background:#1877f2">FB</div><div class="ch-body"><div class="ch-name">Facebook / Meta</div><div class="ch-sub">21M impressions · 35–55 segment</div></div><div class="ch-stat"><div class="ch-val">1.9%</div><div class="ch-lbl">CTR</div></div></div>
+      <div class="ch-row"><div class="ch-icon" style="background:#FF0000">YT</div><div class="ch-body"><div class="ch-name">YouTube</div><div class="ch-sub">14M impressions · 6s + 30s pre-roll</div></div><div class="ch-stat"><div class="ch-val">2.3%</div><div class="ch-lbl">CTR</div></div></div>
+      <div class="ch-row"><div class="ch-icon" style="background:#E1306C">IG</div><div class="ch-body"><div class="ch-name">Instagram</div><div class="ch-sub">11M impressions · Stories + Reels</div></div><div class="ch-stat"><div class="ch-val">1.4%</div><div class="ch-lbl">CTR ↓</div></div></div>
+      <div class="ch-row"><div class="ch-icon" style="background:#0A66C2">LI</div><div class="ch-body"><div class="ch-name">LinkedIn</div><div class="ch-sub">4M impressions · MICE/corporate health</div></div><div class="ch-stat"><div class="ch-val">1.8%</div><div class="ch-lbl">CTR</div></div></div>
+      <div class="ch-row"><div class="ch-icon" style="background:#FF0050">TK</div><div class="ch-body"><div class="ch-name">TikTok</div><div class="ch-sub">6M impressions · 18–34 · new</div></div><div class="ch-stat"><div class="ch-val">3.1%</div><div class="ch-lbl">CTR ↑</div></div></div>
+      <div class="ch-row"><div class="ch-icon" style="background:var(--slate)">OOH</div><div class="ch-body"><div class="ch-name">OOH + SMRT + Print</div><div class="ch-sub">5M impressions est. · brand awareness</div></div><div class="ch-stat"><div class="ch-val">Est.</div><div class="ch-lbl">No direct CTR</div></div></div>
+      <div class="signal" style="background:var(--paid-bg);border:1px solid #9fd8e0;margin-top:12px"><strong>Meltwater signal</strong>TikTok is the highest CTR paid channel despite smallest volume — the mental wellness rider creative is resonating with younger cohorts. Scale up before competitors fill this space. TikTok wellness insurance content is growing 3x faster than general financial content on the platform.</div>
+    </div>
+  </div>
+</div>
+
+<!-- EARNED -->
+<div id="tc-earned" class="tc">
+  <div class="sec-lbl">Earned — Consideration Stage</div>
+  <div style="background:var(--earned-bg);border:1px solid #c5a9f0;border-radius:9px;padding:14px 18px;margin-bottom:18px">
+    <div style="font-size:11px;font-weight:700;color:var(--earned-acc);margin-bottom:3px">What Earned is doing in the journey</div>
+    <div style="font-size:10px;color:var(--slate);line-height:1.7">Insurance is a high-trust, high-consideration purchase. Earned media is where real Singaporeans decide whether to trust Income. Seedly reviews, Reddit threads, Facebook group conversations, and agent referrals dominate the consideration stage. Income doesn't control it but can shape it — through agent experience, claim satisfaction, community engagement, and seeding the right financial influencer voices. The risk: leaving Seedly's "is Income good?" questions unanswered while AIA and Prudential's agents are actively responding in those spaces.</div>
+  </div>
+  <div class="krow">
+    <div class="kpi" style="border-top:3px solid var(--earned)"><div class="kpi-lbl">Total earned mentions</div><div class="kpi-val">84K</div><div class="kpi-sub">News + social + forums + community groups</div><div class="kdelta d-up">+11% MoM</div></div>
+    <div class="kpi" style="border-top:3px solid var(--earned)"><div class="kpi-lbl">Share of voice</div><div class="kpi-val">42%</div><div class="kpi-sub">vs. Prudential, AIA, Great Eastern, Manulife</div><div class="kdelta d-up">+5pts vs Apr</div></div>
+    <div class="kpi" style="border-top:3px solid var(--earned)"><div class="kpi-lbl">Top earned channel</div><div class="kpi-val">Seedly</div><div class="kpi-sub">24K mentions · highest engagement</div><div class="kdelta d-up">+22% MoM</div></div>
+    <div class="kpi" style="border-top:3px solid var(--earned)"><div class="kpi-lbl">Positive earned sentiment</div><div class="kpi-val">63%</div><div class="kpi-sub">Of all earned mentions</div><div class="kdelta d-up">+4pts vs Apr</div></div>
+  </div>
+  <div class="two">
+    <div class="card">
+      <div class="ctitle">Top earned narratives <span class="badge badge-e">Social Listening</span></div>
+      <div class="nrow"><div class="nnum" style="background:var(--earned)">1</div><div class="nbody"><div class="ntitle">Value-for-money positioning vs. big players</div><div class="nmeta">28,400 mentions · Seedly, Reddit, Facebook groups</div><div class="bw"><div class="bf" style="width:88%;background:var(--earned)"></div></div><div class="tags"><span class="tag t-up">Rising +24%</span><span class="tag t-opp">Income's biggest earned asset</span></div></div></div>
+      <div class="nrow"><div class="nnum" style="background:var(--earned)">2</div><div class="nbody"><div class="ntitle">Claim settlement — positive experiences shared</div><div class="nmeta">14,200 mentions · Google reviews, HardwareZone</div><div class="bw"><div class="bf" style="width:66%;background:var(--earned)"></div></div><div class="tags"><span class="tag t-up">Rising +19%</span><span class="tag t-opp">Trust driver</span></div></div></div>
+      <div class="nrow"><div class="nnum" style="background:var(--earned)">3</div><div class="nbody"><div class="ntitle">"Is Income coverage enough?" coverage-gap doubt</div><div class="nmeta">9,600 mentions · Reddit, Seedly, WhatsApp groups</div><div class="bw"><div class="bf" style="width:42%;background:var(--red)"></div></div><div class="tags"><span class="tag t-risk">Monitor — friction</span></div></div></div>
+      <div class="nrow"><div class="nnum" style="background:var(--earned)">4</div><div class="nbody"><div class="ntitle">Agent quality and responsiveness praise</div><div class="nmeta">7,800 mentions · Facebook groups, Google reviews</div><div class="bw"><div class="bf" style="width:34%;background:var(--teal)"></div></div><div class="tags"><span class="tag t-ne">Stable</span><span class="tag t-opp">Advocacy signal</span></div></div></div>
+    </div>
+    <div class="card" style="display:flex;flex-direction:column">
+      <div class="ctitle">Key earned narrative owners <span class="badge badge-e">Influencer Analytics</span></div>
+      <div class="nrow"><div class="nbody"><div class="ntitle">Financial planning influencers (Seedly, YouTube)</div><div class="nmeta">~40 creators · avg 280K reach · SG-focused</div><div class="bw"><div class="bf" style="width:88%;background:var(--earned)"></div></div><div class="tags"><span class="tag t-up">Highest trust segment</span></div></div></div>
+      <div class="nrow"><div class="nbody"><div class="ntitle">Parenting communities (Facebook groups)</div><div class="nmeta">12 groups · avg 45K members · CI + life focus</div><div class="bw"><div class="bf" style="width:60%;background:var(--teal)"></div></div><div class="tags"><span class="tag t-opp">High consideration intent</span></div></div></div>
+      <div class="nrow"><div class="nbody"><div class="ntitle">Reddit r/singaporefi, r/singapore</div><div class="nmeta">Coverage debate + competitor comparison threads</div><div class="bw"><div class="bf" style="width:42%;background:var(--red)"></div></div><div class="tags"><span class="tag t-risk">Source of coverage-gap doubt</span></div></div></div>
+      <div class="nrow"><div class="nbody"><div class="ntitle">Mental health advocacy creators (TikTok, IG)</div><div class="nmeta">18 creators · avg 120K reach · new territory</div><div class="bw"><div class="bf" style="width:24%;background:var(--inc)"></div></div><div class="tags"><span class="tag t-up">Emerging +52%</span></div></div></div>
+      <div class="signal" style="background:var(--earned-bg);border:1px solid #c5a9f0;margin-top:auto"><strong style="color:var(--earned-acc)">Meltwater signal</strong>SG financial planning YouTube creators are generating 4x the consideration-stage engagement of mass media coverage. Prospects who engage with a "how to choose your Integrated Shield Plan" video from an independent creator show 2.4x higher policy inquiry rate on Income.com.sg within 72 hours.</div>
+    </div>
+  </div>
+  <div class="full">
+    <div class="ctitle">Earned friction to address <span class="badge badge-warn">Monitor</span></div>
+    <div class="risk-row"><div><div class="sev sev-h">High</div></div><div><div class="rtitle">"Is Income's coverage actually enough vs Prudential PruShield / AIA Max Essential?"</div><div class="rdesc">9,600 mentions on Seedly threads, Reddit r/singaporefi and Facebook financial groups. This is the primary objection at the consideration-to-intent transition. No current paid or owned content directly addresses the comparison question. Competitors' agents are actively seeding responses in these threads.</div></div></div>
+    <div class="risk-row"><div><div class="sev sev-m">Medium</div></div><div><div class="rtitle">Negative claim experience stories — viral potential on Reddit</div><div class="rdesc">3,200 mentions. A small number of negative claim narratives (slow payout, rejected claims, policy exclusions) are receiving disproportionate amplification. Without a structured response framework, these risk compounding and damaging the earned sentiment score.</div></div></div>
+    <div class="risk-row"><div><div class="sev sev-l">Watch</div></div><div><div class="rtitle">Union / NTUC brand association — shifting perception among younger segments</div><div class="rdesc">Younger earners (25–34) associate "NTUC" with their parents' generation. The brand heritage is a strength for 35–55 but creating neutrality or slight friction in younger earned conversation. Opportunity to lean into "reimagined for the next generation" narrative.</div></div></div>
+  </div>
+</div>
+
+<!-- OWNED -->
+<div id="tc-owned" class="tc">
+  <div class="sec-lbl">Owned — Conversion &amp; Loyalty Stage</div>
+  <div style="background:var(--owned-bg);border:1px solid #f4a0b0;border-radius:9px;padding:14px 18px;margin-bottom:18px">
+    <div style="font-size:11px;font-weight:700;color:var(--owned-acc);margin-bottom:3px">What Owned is doing in the journey</div>
+    <div style="font-size:10px;color:var(--slate);line-height:1.7">Owned channels are where intent becomes policy — Income.com.sg, the myIncome app, STB financial literacy content, email journeys, and agent-assisted digital tools. A prospect who's been reached by paid and reassured by earned arrives at owned to compare, calculate, and convert. Owned also has the critical job of turning satisfied policyholders into advocates who feed back into earned: their Google review, their Seedly comment, their Facebook post recommending Income to their friends.</div>
+  </div>
+  <div class="krow">
+    <div class="kpi" style="border-top:3px solid var(--owned)"><div class="kpi-lbl">Income.com.sg sessions</div><div class="kpi-val">1.4M</div><div class="kpi-sub">Monthly · +18% YoY</div><div class="kdelta d-up">+18% YoY</div></div>
+    <div class="kpi" style="border-top:3px solid var(--owned)"><div class="kpi-lbl">myIncome app sessions</div><div class="kpi-val">380K</div><div class="kpi-sub">Monthly MAU · servicing + cross-sell</div><div class="kdelta d-up">+11% MoM</div></div>
+    <div class="kpi" style="border-top:3px solid var(--owned)"><div class="kpi-lbl">Content gap score</div><div class="kpi-val">4 / 6</div><div class="kpi-sub">Earned narratives with no owned response</div><div class="kdelta d-dn">Needs attention</div></div>
+    <div class="kpi" style="border-top:3px solid var(--owned)"><div class="kpi-lbl">Owned → quote conversion</div><div class="kpi-val">4.8%</div><div class="kpi-sub">Web sessions → get-a-quote start</div><div class="kdelta d-up">+0.6pts vs Q1</div></div>
+  </div>
+  <div class="two">
+    <div class="card" style="display:flex;flex-direction:column">
+      <div class="ctitle">Owned channel performance <span class="badge badge-o">Owned Analytics</span></div>
+      <div class="ch-row"><div class="ch-icon" style="background:var(--inc)">WEB</div><div class="ch-body"><div class="ch-name">Income.com.sg</div><div class="ch-sub">1.4M sessions · 3.8min avg time</div></div><div class="ch-stat"><div class="ch-val">4.8%</div><div class="ch-lbl">quote conv.</div></div></div>
+      <div class="ch-row"><div class="ch-icon" style="background:var(--teal)">APP</div><div class="ch-body"><div class="ch-name">myIncome App</div><div class="ch-sub">380K MAU · iOS + Android</div></div><div class="ch-stat"><div class="ch-val">6.2%</div><div class="ch-lbl">eng. rate</div></div></div>
+      <div class="ch-row"><div class="ch-icon" style="background:#E1306C">IG</div><div class="ch-body"><div class="ch-name">Instagram</div><div class="ch-sub">142K followers · 14 posts/month</div></div><div class="ch-stat"><div class="ch-val">3.6%</div><div class="ch-lbl">eng. rate</div></div></div>
+      <div class="ch-row"><div class="ch-icon" style="background:#FF0050">TK</div><div class="ch-body"><div class="ch-name">TikTok</div><div class="ch-sub">68K followers · 8 posts/month</div></div><div class="ch-stat"><div class="ch-val">5.8%</div><div class="ch-lbl">eng. rate</div></div></div>
+      <div class="ch-row"><div class="ch-icon" style="background:#1877f2">FB</div><div class="ch-body"><div class="ch-name">Facebook</div><div class="ch-sub">210K followers · 20 posts/month</div></div><div class="ch-stat"><div class="ch-val">2.1%</div><div class="ch-lbl">eng. rate</div></div></div>
+      <div class="ch-row"><div class="ch-icon" style="background:#0A66C2">LI</div><div class="ch-body"><div class="ch-name">LinkedIn</div><div class="ch-sub">48K followers · 8 posts/month</div></div><div class="ch-stat"><div class="ch-val">4.2%</div><div class="ch-lbl">eng. rate</div></div></div>
+      <div class="signal" style="background:var(--owned-bg);border:1px solid #f4a0b0;margin-top:12px"><strong style="color:var(--owned-acc)">Meltwater signal</strong>TikTok delivers the highest engagement but receives the fewest posts. Increasing cadence from 8 to 18 posts/month could significantly amplify reach among the 25–34 cohort where earned conversation is most active and paid CTR is highest.</div>
+    </div>
+    <div class="card" style="display:flex;flex-direction:column">
+      <div class="ctitle">Owned content gaps vs earned conversation</div>
+      <div style="font-size:10px;color:var(--muted);margin-bottom:10px;line-height:1.5">Topics trending in earned but missing from owned channels.</div>
+      <div class="ins-row"><div class="ins-ico" style="background:var(--red-pale)">🧠</div><div class="ins-body"><div class="ins-title">Mental health coverage explainer</div><div class="ins-sub">Spiking earned mentions · only 1 owned post this month</div></div><span class="tag t-risk" style="flex-shrink:0">Urgent</span></div>
+      <div class="ins-row"><div class="ins-ico" style="background:var(--amber-pale)">⚖️</div><div class="ins-body"><div class="ins-title">"Income vs AIA vs Prudential" comparison guide</div><div class="ins-sub">Top Reddit/Seedly query · zero owned content</div></div><span class="tag t-risk" style="flex-shrink:0">Gap</span></div>
+      <div class="ins-row"><div class="ins-ico" style="background:var(--earned-bg)">🎓</div><div class="ins-body"><div class="ins-title">Financial literacy for young earners</div><div class="ins-sub">Reddit 25–34 segment · minimal owned series</div></div><span class="tag t-risk" style="flex-shrink:0">Gap</span></div>
+      <div class="ins-row"><div class="ins-ico" style="background:var(--green-pale)">🤝</div><div class="ins-body"><div class="ins-title">Claimant success stories</div><div class="ins-sub">Positive claim mentions in earned · not harvested into owned</div></div><span class="tag t-up" style="flex-shrink:0">Amplify</span></div>
+      <div class="ins-row"><div class="ins-ico" style="background:var(--paid-bg)">🛡️</div><div class="ins-body"><div class="ins-title">IHP / Shield Plan explainer hub</div><div class="ins-sub">Top search query with no dedicated owned landing page</div></div><span class="tag t-risk" style="flex-shrink:0">Gap</span></div>
+      <div class="ins-row"><div class="ins-ico" style="background:var(--owned-bg)">👶</div><div class="ins-body"><div class="ins-title">Life stage planning guides (marriage, newborns)</div><div class="ins-sub">Facebook parenting groups earning organically · no owned anchor</div></div><span class="tag t-risk" style="flex-shrink:0">Gap</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- IDEAS -->
+<div id="tc-ideas" class="tc">
+  <div class="sec-lbl">Campaign ideas — signals-to-strategy</div>
+  <div style="background:#f3f4f6;border:1px solid var(--border);border-radius:9px;padding:14px 18px;margin-bottom:18px;font-size:10px;color:var(--muted);line-height:1.7"><strong style="font-size:11px;color:var(--slate);display:block;margin-bottom:3px">How to read these</strong>Each idea is tagged to the PEO stage it activates. The strongest campaigns span all three — paid hooks attention, earned validates, owned converts and builds loyalty. Use these as provocations for the planning cycle.</div>
+
+  <div class="full">
+    <div style="display:flex;align-items:center;gap:9px;margin-bottom:12px;flex-wrap:wrap"><div style="font-size:16px;font-weight:600;color:var(--slate)">01 — The "Real Coverage, Real Price" Comparison Engine</div><span class="sb sbp"><span class="sbd"></span>Paid</span><span class="sb sbe"><span class="sbd"></span>Earned</span><span class="sb sbo"><span class="sbd"></span>Owned</span></div>
+    <div style="font-size:10px;color:var(--muted);margin-bottom:12px;line-height:1.7">The "is Income's coverage enough?" doubt is hardening on Seedly and Reddit. Rather than ignoring it, make transparency your competitive weapon. A bold, data-led campaign showing exactly what you get per dollar — plan vs plan, insurer vs insurer — before a sceptical prospect self-selects to Prudential.</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px">
+      <div class="idea-card pi"><div class="idea-opp" style="background:var(--paid)">Paid</div><div class="idea-title">Retargeting at Seedly/Reddit financial content</div><div class="idea-body">Serve "What does your premium actually cover?" creative to users who've visited Seedly comparison threads or Reddit r/singaporefi. Counter the doubt before it converts into a competitor policy.</div></div>
+      <div class="idea-card ei"><div class="idea-opp" style="background:var(--earned)">Earned</div><div class="idea-title">Transparent comparison videos with SG fintech creators</div><div class="idea-body">Partner with SeedlyTV, MoneySmart and independent financial planning YouTubers to run unsponsored-feeling, honest comparisons. Authentic voices from the consideration community carry 4x the trust of brand-produced content.</div></div>
+      <div class="idea-card oi"><div class="idea-opp" style="background:var(--owned)">Owned</div><div class="idea-title">Income.com.sg "Compare Plans" interactive hub</div><div class="idea-body">Build a dedicated comparison tool — Income's plans vs market benchmarks, honest about where competitors differ. Intercepts the "Income vs Prudential" search query with owned authority before users reach a third-party aggregator.</div></div>
+    </div>
+  </div>
+
+  <div class="full">
+    <div style="display:flex;align-items:center;gap:9px;margin-bottom:12px;flex-wrap:wrap"><div style="font-size:16px;font-weight:600;color:var(--slate)">02 — Claim Champions: The Post-Purchase Advocacy Engine</div><span class="sb sbe"><span class="sbd"></span>Earned</span><span class="sb sbo"><span class="sbd"></span>Owned</span></div>
+    <div style="font-size:10px;color:var(--muted);margin-bottom:12px;line-height:1.7">Income's single largest untapped asset is satisfied claimants who never become advocates. Every positive claim resolution is a potential Seedly review, a Facebook group post, a Google star. A structured post-claim programme turns the moment of relief into an earned media engine — building the trust signal that accelerates every future prospect through consideration.</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <div class="idea-card ei"><div class="idea-opp" style="background:var(--earned)">Earned</div><div class="idea-title">Post-claim review activation programme</div><div class="idea-body">Trigger a personalised NPS-to-review pathway 2 weeks after successful claim closure. Prompt satisfied policyholders to share their experience on Google, Seedly, and Facebook. Even a 15% conversion rate would add 500+ positive earned touchpoints per month.</div></div>
+      <div class="idea-card oi"><div class="idea-opp" style="background:var(--owned)">Owned</div><div class="idea-title">"People like you got covered" story series</div><div class="idea-body">A dedicated owned content vertical — real (consented) claimant stories by life stage and product type. Addresses the "will they actually pay?" doubt at the exact conversion moment. Deploy as owned content hub + social series + email sequence to warm leads.</div></div>
+    </div>
+  </div>
+
+  <div class="full">
+    <div style="display:flex;align-items:center;gap:9px;margin-bottom:12px;flex-wrap:wrap"><div style="font-size:16px;font-weight:600;color:var(--slate)">03 — Mind Matters: Mental Wellness Insurance Leadership</div><span class="sb sbp"><span class="sbd"></span>Paid</span><span class="sb sbe"><span class="sbd"></span>Earned</span><span class="sb sbo"><span class="sbd"></span>Owned</span></div>
+    <div style="font-size:10px;color:var(--muted);margin-bottom:12px;line-height:1.7">Mental health coverage mentions are up 52% on TikTok and Instagram, yet owned content is virtually absent. This is an early-mover window — Income can own the mental wellness insurance narrative in Singapore before AIA or Prudential recognise the earned signal and respond.</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px">
+      <div class="idea-card pi"><div class="idea-opp" style="background:var(--paid)">Paid</div><div class="idea-title">TikTok-first mental wellness campaign</div><div class="idea-body">Lead with TikTok video creative targeting 24–35 cohort on destigmatising mental health + introducing the rider. TikTok's 3.1% CTR vs 1.4% IG for Income's paid ads makes it the performance channel for this audience.</div></div>
+      <div class="idea-card ei"><div class="idea-opp" style="background:var(--earned)">Earned</div><div class="idea-title">Mental health creator partnerships</div><div class="idea-body">Partner with SG mental wellness advocates and therapists on TikTok and Instagram to discuss the financial anxiety of healthcare costs. Seed genuine conversations about coverage — don't lead with the product, lead with the person.</div></div>
+      <div class="idea-card oi"><div class="idea-opp" style="background:var(--owned)">Owned</div><div class="idea-title">"Know Your Mind Cover" owned resource hub</div><div class="idea-body">A definitive, editorially-led owned destination explaining mental health coverage in Singapore's insurance landscape — what MediShield covers, what it doesn't, and where Income's rider fills the gap. Becomes the organic SEO anchor for "mental health insurance Singapore" searches.</div></div>
+    </div>
+  </div>
+
+  <div class="full">
+    <div style="display:flex;align-items:center;gap:9px;margin-bottom:12px;flex-wrap:wrap"><div style="font-size:16px;font-weight:600;color:var(--slate)">04 — Life Stages: Reaching Singaporeans at the Trigger Moment</div><span class="sb sbp"><span class="sbd"></span>Paid</span><span class="sb sbe"><span class="sbd"></span>Earned</span></div>
+    <div style="font-size:10px;color:var(--muted);margin-bottom:12px;line-height:1.7">Insurance purchase decisions cluster around life events — marriage, first child, career change, parent illness. Earned conversation in Facebook parenting groups and Reddit r/Singapore spikes at these moments. A precision-matched paid strategy, triggered by life event signals, reaches prospects exactly when their intent is highest.</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <div class="idea-card pi"><div class="idea-opp" style="background:var(--paid)">Paid</div><div class="idea-title">Life event-triggered paid sequences</div><div class="idea-body">Deploy paid creative sequences matched to life event signals: Facebook "new relationship" status changes, LinkedIn "new job" announcements, Baby Bonus registration data (via CPF partnership). The right message at the right life moment dramatically increases consideration conversion.</div></div>
+      <div class="idea-card ei"><div class="idea-opp" style="background:var(--earned)">Earned</div><div class="idea-title">Parenting community engagement programme</div><div class="idea-body">Activate Income financial advisers and trained brand advocates in SG parenting Facebook groups. Not to sell — to genuinely answer "how do I protect my newborn?" questions. Trust-building at scale in the highest-intent earned communities.</div></div>
+    </div>
+  </div>
+
+  <div class="sfooter">
+    <div class="sfl">Ideas derived from: Meltwater Social Listening · Audience Insights · Competitor monitoring · Earned narrative gap analysis</div>
+    <div class="sfr">Concept — Income Insurance CCM Intelligence · May 2026</div>
+  </div>
+</div>
+
+<!-- SEARCH -->
+<div id="tc-search" class="tc">
+  <div class="sec-lbl">Search Intelligence — Intent &amp; Discovery Layer</div>
+  <div style="background:var(--paid-bg);border:1px solid #9fd8e0;border-radius:9px;padding:14px 18px;margin-bottom:18px">
+    <div style="font-size:11px;font-weight:700;color:var(--paid-acc);margin-bottom:3px">Why search matters in the PEO journey</div>
+    <div style="font-size:10px;color:var(--slate);line-height:1.7">Search sits at the seam between earned and owned. When a Singaporean types "income insurance review" or "best integrated shield plan Singapore" they're in active consideration — paid has raised awareness, earned has sparked curiosity, and now they want answers. If Income's owned content doesn't surface at that moment, Seedly's comparison tables, a competitor's blog, or an aggregator fills the gap and takes the conversion. Search intent is the closest proxy to real purchase intent you can get without a direct survey.</div>
+  </div>
+  <div class="krow">
+    <div class="kpi" style="border-top:3px solid var(--teal)"><div class="kpi-lbl">Monthly organic impressions</div><div class="kpi-val">4.2M</div><div class="kpi-sub">Income.com.sg · Google Search Console</div><div class="kdelta d-up">+9% MoM</div></div>
+    <div class="kpi" style="border-top:3px solid var(--teal)"><div class="kpi-lbl">Avg. click-through rate</div><div class="kpi-val">2.7%</div><div class="kpi-sub">Organic search CTR (GSC)</div><div class="kdelta d-dn">-0.3pts vs Apr</div></div>
+    <div class="kpi" style="border-top:3px solid var(--teal)"><div class="kpi-lbl">Top ranking keyword</div><div class="kpi-val">#1</div><div class="kpi-sub">"income insurance singapore"</div><div class="kdelta d-ne">Stable</div></div>
+    <div class="kpi" style="border-top:3px solid #B85C00"><div class="kpi-lbl">Keyword gap (high intent)</div><div class="kpi-val">28</div><div class="kpi-sub">High-volume queries with no owned rank</div><div class="kdelta d-dn">Needs content</div></div>
+  </div>
+  <div class="two">
+    <div class="card" style="display:flex;flex-direction:column">
+      <div class="ctitle">Top organic queries — Income.com.sg <span class="badge">Google Search Console · Example</span></div>
+      <div style="font-size:10px;color:var(--muted);margin-bottom:10px;line-height:1.5">Queries driving most impressions last 28 days. Position = avg. Google ranking.</div>
+      <div style="display:grid;grid-template-columns:1fr auto auto auto;gap:0;font-size:9px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;padding:0 0 5px;border-bottom:1px solid var(--border);margin-bottom:3px">
+        <div>Query</div><div style="text-align:right;padding-right:10px">Impr.</div><div style="text-align:right;padding-right:10px">CTR</div><div style="text-align:right">Pos.</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr auto auto auto;gap:0;align-items:center;padding:7px 0;border-bottom:1px solid #f0f0f0;font-size:11px"><div style="font-weight:600;color:var(--slate)">income insurance singapore</div><div style="text-align:right;padding-right:10px;color:var(--muted)">780K</div><div style="text-align:right;padding-right:10px;font-weight:700;color:var(--green)">5.2%</div><div style="text-align:right;font-weight:700;color:var(--teal)">#1</div></div>
+      <div style="display:grid;grid-template-columns:1fr auto auto auto;gap:0;align-items:center;padding:7px 0;border-bottom:1px solid #f0f0f0;font-size:11px"><div style="font-weight:600;color:var(--slate)">integrated shield plan singapore</div><div style="text-align:right;padding-right:10px;color:var(--muted)">620K</div><div style="text-align:right;padding-right:10px;font-weight:700;color:var(--green)">3.8%</div><div style="text-align:right;font-weight:700;color:var(--teal)">#3</div></div>
+      <div style="display:grid;grid-template-columns:1fr auto auto auto;gap:0;align-items:center;padding:7px 0;border-bottom:1px solid #f0f0f0;font-size:11px"><div style="font-weight:600;color:var(--slate)">income insurance review</div><div style="text-align:right;padding-right:10px;color:var(--muted)">440K</div><div style="text-align:right;padding-right:10px;font-weight:700;color:var(--green)">4.1%</div><div style="text-align:right;font-weight:700;color:var(--teal)">#2</div></div>
+      <div style="display:grid;grid-template-columns:1fr auto auto auto;gap:0;align-items:center;padding:7px 0;border-bottom:1px solid #f0f0f0;font-size:11px"><div style="font-weight:600;color:var(--slate)">income insurance vs aia vs prudential</div><div style="text-align:right;padding-right:10px;color:var(--muted)">310K</div><div style="text-align:right;padding-right:10px;font-weight:700;color:var(--red)">0.6%</div><div style="text-align:right;font-weight:700;color:var(--red)">#14</div></div>
+      <div style="display:grid;grid-template-columns:1fr auto auto auto;gap:0;align-items:center;padding:7px 0;border-bottom:1px solid #f0f0f0;font-size:11px"><div style="font-weight:600;color:var(--slate)">best critical illness insurance sg</div><div style="text-align:right;padding-right:10px;color:var(--muted)">280K</div><div style="text-align:right;padding-right:10px;font-weight:700;color:var(--red)">0.3%</div><div style="text-align:right;font-weight:700;color:var(--red)">#21</div></div>
+      <div style="display:grid;grid-template-columns:1fr auto auto auto;gap:0;align-items:center;padding:7px 0;border-bottom:1px solid #f0f0f0;font-size:11px"><div style="font-weight:600;color:var(--slate)">mental health insurance singapore</div><div style="text-align:right;padding-right:10px;color:var(--muted)">160K</div><div style="text-align:right;padding-right:10px;font-weight:700;color:var(--red)">0.2%</div><div style="text-align:right;font-weight:700;color:var(--red)">#28</div></div>
+      <div style="display:grid;grid-template-columns:1fr auto auto auto;gap:0;align-items:center;padding:7px 0;font-size:11px"><div style="font-weight:600;color:var(--slate)">income insurance claim process</div><div style="text-align:right;padding-right:10px;color:var(--muted)">140K</div><div style="text-align:right;padding-right:10px;font-weight:700;color:var(--green)">3.4%</div><div style="text-align:right;font-weight:700;color:var(--teal)">#4</div></div>
+      <div class="signal" style="background:var(--paid-bg);border:1px solid #9fd8e0;margin-top:12px"><strong>Search signal</strong>"Income insurance vs AIA vs Prudential" generates 310K monthly impressions but Income ranks #14 — Seedly and MoneySmart dominate this comparison moment. This is the search version of the earned consideration gap: fixable with a dedicated, honest comparison page on owned.</div>
+    </div>
+    <div class="card" style="display:flex;flex-direction:column">
+      <div class="ctitle">Keyword gap — high intent, no owned rank <span class="badge" style="background:var(--owned-bg);color:var(--owned-acc)">SEMrush · Example</span></div>
+      <div style="font-size:10px;color:var(--muted);margin-bottom:10px;line-height:1.5">Queries with strong volume where Income has no ranking page. Traffic is going to Seedly, MoneySmart, and competitors.</div>
+      <div class="nrow"><div class="nbody"><div class="ntitle">best integrated shield plan singapore 2026</div><div class="nmeta">Vol: 190K/mo · Intent: transactional · Seedly ranks #1</div><div class="bw"><div class="bf" style="width:85%;background:var(--red)"></div></div><div class="tags"><span class="tag t-risk">No rank</span><span class="tag" style="background:var(--red-pale);color:var(--red)">MoneySmart ranks #2</span></div></div></div>
+      <div class="nrow"><div class="nbody"><div class="ntitle">mental health coverage insurance sg</div><div class="nmeta">Vol: 130K/mo · Intent: informational · rising fast</div><div class="bw"><div class="bf" style="width:70%;background:var(--red)"></div></div><div class="tags"><span class="tag t-risk">No rank</span><span class="tag t-up">Early-mover window open</span></div></div></div>
+      <div class="nrow"><div class="nbody"><div class="ntitle">income insurance star hospitalisation plan review</div><div class="nmeta">Vol: 95K/mo · Intent: transactional · branded</div><div class="bw"><div class="bf" style="width:58%;background:var(--amber)"></div></div><div class="tags"><span class="tag t-ne">Pos. #9</span><span class="tag t-up">One content update could rank #3</span></div></div></div>
+      <div class="nrow"><div class="nbody"><div class="ntitle">what does medishield life not cover</div><div class="nmeta">Vol: 88K/mo · Intent: informational · IHP opportunity</div><div class="bw"><div class="bf" style="width:46%;background:var(--amber)"></div></div><div class="tags"><span class="tag t-risk">No rank</span><span class="tag t-opp">Perfect IHP upsell landing page</span></div></div></div>
+      <div class="nrow"><div class="nbody"><div class="ntitle">income insurance whole life plan savings</div><div class="nmeta">Vol: 62K/mo · Intent: transactional · paid campaign active</div><div class="bw"><div class="bf" style="width:30%;background:var(--red)"></div></div><div class="tags"><span class="tag t-risk">No rank</span><span class="tag" style="background:var(--red-pale);color:var(--red)">Paid active — no organic page</span></div></div></div>
+      <div class="signal" style="background:var(--owned-bg);border:1px solid #f4a0b0;margin-top:auto"><strong style="color:var(--owned-acc)">Critical gap flagged</strong>Income is running a paid campaign for whole life savings plans but has no organic landing page ranking for those queries. Every click is costing S$2.80–4.10 via SEM. An owned page ranking organically costs nothing per click once built — paid without owned backup wastes budget.</div>
+    </div>
+  </div>
+
+  <div class="full">
+    <div class="ctitle">Search intent vs earned narrative — alignment check</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px">
+      <div style="padding:13px;background:var(--green-pale);border-radius:8px;border-left:4px solid var(--green)">
+        <div style="font-size:10px;font-weight:700;color:var(--green);margin-bottom:7px">Aligned — search and earned agree</div>
+        <div style="font-size:10px;color:var(--slate);line-height:1.7">
+          <div style="margin-bottom:5px"><strong>Claim process clarity</strong> — high search + positive earned mentions. Income ranks #4. Content is working.</div>
+          <div style="margin-bottom:5px"><strong>Value-for-money positioning</strong> — searched and earned. Consistent positive signal across both.</div>
+          <div><strong>Agent quality</strong> — search queries for agent reviews align with earned praise. Double down on this.</div>
+        </div>
+      </div>
+      <div style="padding:13px;background:var(--red-pale);border-radius:8px;border-left:4px solid var(--red)">
+        <div style="font-size:10px;font-weight:700;color:var(--red);margin-bottom:7px">Diverging — search friction meets earned doubt</div>
+        <div style="font-size:10px;color:var(--slate);line-height:1.7">
+          <div style="margin-bottom:5px"><strong>"Best critical illness insurance"</strong> — massive search, rank #21, earned conversation is mixed. Third parties dominating both.</div>
+          <div style="margin-bottom:5px"><strong>Competitor comparisons</strong> — searched 310K/mo, no owned rank. Seedly and MoneySmart filling the gap.</div>
+          <div><strong>"Is Income coverage enough?"</strong> — top consideration search, no owned response. Hardening doubt.</div>
+        </div>
+      </div>
+      <div style="padding:13px;background:var(--amber-pale);border-radius:8px;border-left:4px solid var(--amber)">
+        <div style="font-size:10px;font-weight:700;color:var(--amber);margin-bottom:7px">Opportunity — earned rising, search lagging</div>
+        <div style="font-size:10px;color:var(--slate);line-height:1.7">
+          <div style="margin-bottom:5px"><strong>Mental health coverage</strong> — TikTok earned content spiking +52%, search queries trending up. Publish now to own ranking before competitors react.</div>
+          <div style="margin-bottom:5px"><strong>MediShield Life gaps</strong> — earned conversation about IHP is growing, search volume building. Perfect owned content moment.</div>
+          <div><strong>Life-stage planning</strong> — parenting community earned signals strong, search volume growing. Content series could capture both.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sfooter">
+    <div class="sfl">Sources (example): Google Search Console · SEMrush · Google Trends · Meltwater Social Listening cross-reference</div>
+    <div class="sfr">Note: all search volumes are illustrative estimates — real GSC data requires Income.com.sg property access · May 2026</div>
+  </div>
+</div>
+
+<!-- ARCH -->
+<div id="tc-arch" class="tc">
+  <div class="sec-lbl">Data flow &amp; attribution — realistic build plan</div>
+  <div style="display:flex;gap:14px;flex-wrap:wrap;margin-bottom:18px">
+    <div style="display:flex;align-items:center;gap:5px;font-size:10px;font-weight:600;color:var(--muted)"><div style="width:9px;height:9px;border-radius:50%;background:var(--teal)"></div>Meltwater native (ready now)</div>
+    <div style="display:flex;align-items:center;gap:5px;font-size:10px;font-weight:600;color:var(--muted)"><div style="width:9px;height:9px;border-radius:50%;background:var(--green)"></div>Buildable in 4–10 wks</div>
+    <div style="display:flex;align-items:center;gap:5px;font-size:10px;font-weight:600;color:var(--muted)"><div style="width:9px;height:9px;border-radius:50%;background:var(--amber)"></div>Requires 3rd-party access</div>
+    <div style="display:flex;align-items:center;gap:5px;font-size:10px;font-weight:600;color:var(--muted)"><div style="width:9px;height:9px;border-radius:50%;background:var(--red)"></div>Hard gap — modelled only</div>
+  </div>
+
+  <div class="arch-phase">
+    <div class="arch-phase-hdr">
+      <div class="pnum">1</div>
+      <div><div class="ptitle">Earned &amp; social listening layer — Week 1–4 (Meltwater onboarding)</div><div class="ptime">Meltwater-native. No additional integrations needed. Immediate value from Day 1.</div></div>
+    </div>
+    <div class="anodes">
+      <div class="anode node-live"><div class="anode-hdr"><div class="anode-ico" style="background:var(--paid-bg);color:var(--paid-acc)">📡</div><div class="anode-title">Meltwater Social Listening</div></div><div class="anode-body">Keyword clusters set per narrative theme (coverage, claim, value, mental health, competitor). Monitors Facebook, TikTok, Instagram, Reddit, Seedly, HardwareZone, forums, news, blogs. Near-real-time 6hr refresh. Singlish + financial jargon handling via Online Sensing SG.</div><div class="atags"><span class="atag at-live">Live Day 1</span><span class="atag at-build">API pull</span></div></div>
+      <div class="anode node-live"><div class="anode-hdr"><div class="anode-ico" style="background:var(--paid-bg);color:var(--paid-acc)">👥</div><div class="anode-title">Meltwater Influencer Analytics</div></div><div class="anode-body">Tracks which SG financial creators, parenting community voices, and wellness advocates are amplifying which narratives. Identifies the Seedly/YouTube fintech creator cluster, reach estimates, engagement rates, and audience demographics. Attribution of earned narrative to influencer partners vs organic.</div><div class="atags"><span class="atag at-live">Live Day 1</span><span class="atag at-build">API pull</span></div></div>
+      <div class="anode node-live"><div class="anode-hdr"><div class="anode-ico" style="background:var(--paid-bg);color:var(--paid-acc)">📰</div><div class="anode-title">Meltwater News Intelligence</div></div><div class="anode-body">Monitors 300,000+ global news sources for Income Insurance coverage and competitor mentions (AIA, Prudential, Great Eastern, Manulife). Tracks share of voice. CNA, Business Times, Straits Times, insurance trade press. Broadcast monitoring available as add-on.</div><div class="atags"><span class="atag at-live">Live Day 1</span><span class="atag at-build">API pull</span></div></div>
+    </div>
+  </div>
+
+  <div class="arch-phase">
+    <div class="arch-phase-hdr">
+      <div class="pnum">2</div>
+      <div><div class="ptitle">Paid + owned layer — Week 4–10 (integrations required)</div><div class="ptime">Requires OAuth from Income's digital team and UTM taxonomy standardisation from media agency. Each connection is 1–3 days technical work; stakeholder alignment is the real timeline driver.</div></div>
+    </div>
+    <div class="anodes">
+      <div class="anode node-build"><div class="anode-hdr"><div class="anode-ico" style="background:var(--green-pale);color:var(--green)">🔍</div><div class="anode-title">Google Search Console + SEMrush</div></div><div class="anode-body">GSC shows exactly which queries drive impressions and clicks to Income.com.sg with position and CTR. Free once Income's digital team grants property access. SEMrush adds competitor keyword gap analysis — what queries Seedly, MoneySmart, or AIA rank for that Income doesn't.</div><div class="atags"><span class="atag at-build">Wk 4–5</span><span class="atag at-manual">GSC property access</span><span class="atag at-live">SEMrush API</span></div></div>
+      <div class="anode node-build"><div class="anode-hdr"><div class="anode-ico" style="background:#f3e5f5;color:#6a1b9a">📱</div><div class="anode-title">Owned Social APIs (Meta, TikTok, LinkedIn)</div></div><div class="anode-body">Meltwater Owned Analytics ingests follower counts, post reach, and engagement rates via platform APIs. Requires Income's social team to authorise via Meta Business Suite, TikTok for Business, LinkedIn Campaign Manager. Enables cross-channel owned benchmarking.</div><div class="atags"><span class="atag at-build">Wk 5–6</span><span class="atag at-manual">Platform auth</span></div></div>
+      <div class="anode node-build"><div class="anode-hdr"><div class="anode-ico" style="background:var(--green-pale);color:var(--green)">💰</div><div class="anode-title">Paid media API (via agency)</div></div><div class="anode-body">Media agency standardises UTM taxonomy across all campaigns. API pulls from Meta Ads, Google Ads, TikTok Ads Manager, programmatic DSPs. Requires agency sign-off on taxonomy framework — this is where timelines typically slip. CRM policy data requires a separate Privacy-compliant integration plan.</div><div class="atags"><span class="atag at-build">Wk 6–10</span><span class="atag at-manual">Agency dependency</span></div></div>
+    </div>
+  </div>
+
+  <div class="arch-phase">
+    <div class="arch-phase-hdr">
+      <div class="pnum">3</div>
+      <div><div class="ptitle">Modelled attribution layer — Month 3–6 (research agency + data partnerships)</div><div class="ptime">Genuinely hard. Requires a separate MMM engagement and Income's access to CRM policy conversion data from the analytics team.</div></div>
+    </div>
+    <div class="anodes">
+      <div class="anode node-gap"><div class="anode-hdr"><div class="anode-ico" style="background:var(--amber-pale);color:var(--amber)">⚠️</div><div class="anode-title">UTM → Policy purchase attribution</div></div><div class="anode-body">Gap: you can trace paid impression → Income.com.sg click, but you cannot close-loop to a policy issued without CRM integration. A prospect clicks a paid ad, researches for 3 weeks, then calls their agent. The policy gets no digital attribution. A clean-room or MMM approach is needed to bridge this.</div><div class="atags"><span class="atag at-model">Modelled</span><span class="atag at-manual">Not deterministic</span></div></div>
+      <div class="anode node-gap"><div class="anode-hdr"><div class="anode-ico" style="background:var(--amber-pale);color:var(--amber)">📈</div><div class="anode-title">Marketing Mix Modelling (MMM)</div></div><div class="anode-body">Quarterly exercise matching channel spend data against new policy sales by product type. Produces channel contribution weights — e.g. "paid social drove 19% of CI plan uptake this quarter." Not real-time, not individual-level. Best for budget planning and board reporting.</div><div class="atags"><span class="atag at-model">Quarterly</span><span class="atag at-manual">Research agency</span></div></div>
+      <div class="anode node-hard"><div class="anode-hdr"><div class="anode-ico" style="background:var(--red-pale);color:var(--red)">🚫</div><div class="anode-title">Individual-level attribution</div></div><div class="anode-body">Does not exist for insurance marketing and cannot be built. You cannot follow a single prospect from a TikTok ad to a policy issuance — PDPA regulations prevent cross-system linkage without consent, and the consideration journey spans months across multiple channels. Any vendor claiming otherwise is selling snake oil.</div><div class="atags"><span class="atag at-model">Not achievable</span></div></div>
+    </div>
+  </div>
+
+  <div class="full">
+    <div class="ctitle">Live data flow — what feeds what</div>
+    <div style="font-size:9px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:7px">Earned streams (live now)</div>
+    <div class="flow-row"><div class="flow-src fs-mw">Meltwater Social Listening</div><div class="flow-arr">→</div><div class="flow-mid">Keyword clusters → narrative volume, sentiment, reach by channel. Covers Seedly, Reddit, Facebook groups, TikTok, Instagram, news. 6hr refresh + Singlish/financial jargon via Online Sensing SG.</div><div class="flow-arr">→</div><div class="flow-dst fd-live">Earned tab — LIVE</div></div>
+    <div class="flow-row" style="margin-bottom:14px"><div class="flow-src fs-mw">Meltwater Influencer Analytics</div><div class="flow-arr">→</div><div class="flow-mid">Creator-level data: reach, eng rate, audience demographics, narratives covered. Matched against paid partnership list to show paid vs organic influence split.</div><div class="flow-arr">→</div><div class="flow-dst fd-live">Earned tab — LIVE</div></div>
+    <div style="font-size:9px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:7px">Search streams (needs GSC access)</div>
+    <div class="flow-row"><div class="flow-src fs-e">Google Search Console</div><div class="flow-arr">→</div><div class="flow-mid">Query-level impressions, clicks, CTR, avg. position for Income.com.sg. Segmentable by country, device, date. Free once Income's digital team grants property access to the dashboard service account.</div><div class="flow-arr">→</div><div class="flow-dst fd-build">Search tab — Wk 5</div></div>
+    <div class="flow-row" style="margin-bottom:14px"><div class="flow-src fs-e">SEMrush / Ahrefs API</div><div class="flow-arr">→</div><div class="flow-mid">Keyword gap analysis vs competitor domains (Seedly, MoneySmart, AIA, Prudential). High-volume queries where third parties outrank Income. Requires paid SEMrush licence + API key.</div><div class="flow-arr">→</div><div class="flow-dst fd-build">Search tab — Wk 6</div></div>
+    <div style="font-size:9px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:7px">Owned streams (needs integration)</div>
+    <div class="flow-row"><div class="flow-src fs-e">GA4 (Income.com.sg)</div><div class="flow-arr">→</div><div class="flow-mid">Sessions, traffic source, content engagement, quote-start conversion events. Requires Income digital team OAuth authorisation into Meltwater Owned Analytics module.</div><div class="flow-arr">→</div><div class="flow-dst fd-build">Owned tab — Wk 5</div></div>
+    <div class="flow-row" style="margin-bottom:14px"><div class="flow-src fs-e">Meta / TikTok / LinkedIn APIs</div><div class="flow-arr">→</div><div class="flow-mid">Follower counts, post reach, organic eng. rate, audience breakdown. Platform-by-platform auth required. Meltwater Owned Analytics ingests automatically once connected.</div><div class="flow-arr">→</div><div class="flow-dst fd-build">Owned tab — Wk 6</div></div>
+    <div style="font-size:9px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:7px">Paid streams (agency dependency)</div>
+    <div class="flow-row"><div class="flow-src fs-p">Meta / Google / TikTok Ads</div><div class="flow-arr">→</div><div class="flow-mid">Impressions, CTR, CPM, creative performance by narrative theme. Requires standardised UTM taxonomy from media agency. Agency must grant API read access.</div><div class="flow-arr">→</div><div class="flow-dst fd-build">Paid tab — Wk 8</div></div>
+    <div class="flow-row" style="margin-bottom:14px"><div class="flow-src fs-p">Programmatic DSPs</div><div class="flow-arr">→</div><div class="flow-mid">Display + OOH data via agency ad-ops. Manual export likely needed unless agency uses DV360 or The Trade Desk with API access.</div><div class="flow-arr">→</div><div class="flow-dst fd-manual">Paid tab — Manual</div></div>
+    <div style="font-size:9px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:7px">Attribution layer (quarter+)</div>
+    <div class="flow-row"><div class="flow-src fs-pt">CRM (Policy data)</div><div class="flow-arr">→</div><div class="flow-mid">New policy issuances by product type and source market. Available to Income's analytics team. Not linkable to individual campaigns without clean-room or MMM. Requires PDPA compliance review before integration.</div><div class="flow-arr">→</div><div class="flow-dst fd-model">Funnel — Modelled</div></div>
+    <div class="flow-row"><div class="flow-src fs-pt">Research agency MMM</div><div class="flow-arr">→</div><div class="flow-mid">Quarterly channel contribution model. Inputs: media spend by channel, new policy sales, survey intent data. Output: % contribution weights per channel. Retrospective, not real-time.</div><div class="flow-arr">→</div><div class="flow-dst fd-model">Funnel — Quarterly</div></div>
+  </div>
+
+  <div class="full">
+    <div class="ctitle">What can and cannot be attributed — honest guide</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+      <div>
+        <div style="font-size:11px;font-weight:700;color:var(--green);margin-bottom:9px">What you can measure reliably</div>
+        <div class="attr-card attr-ok"><div class="attr-title">Earned narrative volume and sentiment</div><div class="attr-body">Fully measurable via Meltwater. Real-time. Segmentable by channel, competitor brand, product line, and narrative theme. Reliable from Day 1.</div></div>
+        <div class="attr-card attr-ok"><div class="attr-title">Owned channel engagement</div><div class="attr-body">Measurable once platform APIs are connected. Post-level data, audience demographics, eng. rate. Reliable within 4–6 weeks.</div></div>
+        <div class="attr-card attr-ok"><div class="attr-title">Organic search keyword → page performance</div><div class="attr-body">GSC maps exactly which queries surface which Income.com.sg pages, with CTR and position. Actionable from Week 5.</div></div>
+        <div class="attr-card attr-ok"><div class="attr-title">Paid impression → web session</div><div class="attr-body">Traceable with correct UTM taxonomy. You can see how many Income.com.sg sessions came from each paid campaign. Reliable once agency taxonomy is standardised.</div></div>
+      </div>
+      <div>
+        <div style="font-size:11px;font-weight:700;color:var(--red);margin-bottom:9px">What you cannot measure directly</div>
+        <div class="attr-card attr-gap"><div class="attr-title">Web session → policy purchase</div><div class="attr-body">Income.com.sg can track quote starts and agent referral clicks, but policy issuance happens in the CRM/back-office system. No close-loop without a clean PDPA-compliant data bridge.</div></div>
+        <div class="attr-card attr-gap"><div class="attr-title">Agent-mediated sales attribution</div><div class="attr-body">A prospect sees a paid ad, researches for 3 weeks on Seedly, then books an agent appointment. The policy gets no digital attribution. This is the majority of Income's sales flow — not an edge case.</div></div>
+        <div class="attr-card attr-warn"><div class="attr-title">Purchase intent score → actual policy sales</div><div class="attr-body">The intent score in the Overview tab is an audience survey index — it correlates with purchase behaviour but is not a direct predictor. Must be labelled as an indicator, not a forecast metric.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sfooter">
+    <div class="sfl">Architecture: Meltwater API · GA4 OAuth · Google Search Console · SEMrush API · Meta Business API · Google Ads API · Income CRM (PDPA-compliant) · MMM (research agency)</div>
+    <div class="sfr">Data architecture review — May 2026 · Confidential — Income Insurance &amp; Meltwater</div>
+  </div>
+</div>
+
+</div>
+
+<div class="footer">
+  <div class="fl">Meltwater · Income Insurance · Chief Customer Marketing Intelligence · Paid · Earned · Owned</div>
+  <div class="fr">Sources: Meltwater News Intelligence, Social Listening, Influencer Analytics, Audience Insights, Online Sensing SG · Confidential</div>
+</div>
+
+<script>
+function sw(id,el){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
+  document.querySelectorAll('.tc').forEach(t=>t.classList.remove('on'));
+  el.classList.add('on');
+  document.getElementById('tc-'+id).classList.add('on');
+}
+</script>
